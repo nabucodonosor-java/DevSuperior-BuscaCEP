@@ -9,13 +9,15 @@ type Address = {
   localidade: string;
 }
 
-function App() {
+
+const App = () => {
 
   const [searchValue, setSearchValue] = useState('');
   const [addressData, setAddressData] = useState<Address>();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setAddressData(undefined);
 
     axios(`${BASE_URL}/${searchValue}/json`)
     .then(response => setAddressData(response.data))
@@ -34,17 +36,20 @@ function App() {
           value={searchValue}
           onChange={event => setSearchValue(event.target.value)}
           />
+          <label>Cidade: {addressData?.localidade}</label>
          <button className="search-btn">Buscar</button>
-         <>
-          <div className="search-result-item">
-            <strong className="search-result-title">Logradouro</strong> <br/>
-            <span className="search-result-subtitle">{addressData?.logradouro}</span>
-          </div>
-          <div className="search-result-item">
-          <strong className="search-result-title">Localidade</strong> <br/>
-          <span className="search-result-subtitle">{addressData?.localidade}</span>
-          </div> 
-         </>
+         {addressData && (
+           <>
+           <div className="search-result-item">
+             <strong className="search-result-title">Logradouro</strong> <br/>
+             <span className="search-result-subtitle">{addressData?.logradouro}</span>
+           </div>
+           <div className="search-result-item">
+           <strong className="search-result-title">Localidade</strong> <br/>
+           <span className="search-result-subtitle">{addressData?.localidade}</span>
+           </div> 
+          </>
+         )}
        </form>
      </div>
     </div>
